@@ -1,7 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "noEmit": false,
+    "noEmit": true,
+    "allowImportingTsExtensions": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
   },
