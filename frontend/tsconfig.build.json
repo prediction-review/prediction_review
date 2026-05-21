@@ -1,4 +1,9 @@
 {
   "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+  },
   "exclude": ["tests/**/*.ts"]
 }
