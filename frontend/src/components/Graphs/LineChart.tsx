@@ -38,17 +38,7 @@ function pivotData(data: Datapoint[]): Record<string, number>[] {
 export default function LineChartObject({ data, title }: LineChartObjectProps) {
   const formattedData = pivotData(data);
 
-  function getScenarios(data: Datapoint[]): string[] {
-    const scenarioSet = new Set<string>();
-
-    for (const record of data) {
-      scenarioSet.add(record.scenario);
-    }
-
-    return Array.from(scenarioSet.values());
-  }
-
-  const scenarioList = getScenarios(data);
+  const scenarioList = [...new Set(data.map((d) => d.scenario))];
 
   return (
     <div className="w-full">
@@ -57,7 +47,7 @@ export default function LineChartObject({ data, title }: LineChartObjectProps) {
       </h2>
       <ResponsiveContainer width="100%" height={400}>
         <LineChart data={formattedData}>
-          <XAxis dataKey="year_analyzed" />
+          <XAxis dataKey="year_analyzed" type="number" domain={["dataMin", "dataMax"]}/>
           <YAxis width={80} />
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
@@ -69,6 +59,9 @@ export default function LineChartObject({ data, title }: LineChartObjectProps) {
               dataKey={scenario}
               stroke={SCENARIO_STYLES[scenario]?.colour ?? "#0000bb"}
               dot={false}
+              strokeWidth={SCENARIO_STYLES[scenario]?.strokewidth ?? 1}
+              name={SCENARIO_STYLES[scenario]?.label ?? scenario}
+              connectNulls={true}
             />
           ))}
         </LineChart>

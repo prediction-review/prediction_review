@@ -25,6 +25,8 @@ def get_UN_headers(dataframe: pd.DataFrame, header_row: int = 15, series_row: in
     dataframe should be the specific sheet you want to look at, parsed as a dataframe object.  It must be parsed to at least the rows containing the headers
     """
 
+    # TODO: make this function more general
+
     headers = dataframe.iloc[header_row].tolist()
     series = dataframe.iloc[series_row].tolist()
 
@@ -91,39 +93,41 @@ def get_context_id(
             Context.region_id == region_id,
         )
     ).first()
-    if context is None: # make a new context
+    if context is None:  # make a new context
         context = Context(
-                    datatype_id=datatype_id,
-                    age_id=age_id,
-                    gender_id=gender_id,
-                    region_id=region_id,
-                )
+            datatype_id=datatype_id,
+            age_id=age_id,
+            gender_id=gender_id,
+            region_id=region_id,
+        )
         session.add(context)
         session.flush()
         session.refresh(context)
     if context.id is None:
-        raise ValueError(f"context {(datatype_id, age_id, gender_id, region_id)} has no attribute 'id'")
+        raise ValueError(
+            f"context {(datatype_id, age_id, gender_id, region_id)} has no attribute 'id'"
+        )
     return context.id
 
 
 def get_scenario_id(session: Session, key: str) -> int:
-    scenario = session.exec(
-        select(Scenario).where(col(Scenario.scenario_description).ilike(f"%{key}%"))
-    ).first()
+    scenarios = session.exec(select(Scenario)).all()
+    scenario = next(
+        (s for s in scenarios if s.scenario_description.lower() in key.lower()), None
+    )
     if scenario is None:
-        raise ValueError(f"context not found for {f"scenario '{key}' not found"}")
+        raise ValueError(f"context not found for scenario '{key}'")
     if scenario.id is None:
         raise ValueError(f"scenario {key} has no attribute 'id'")
     return scenario.id
+
 
 def get_report_id(session: Session, key: str) -> int:
     """
     input: the name of the report
     output: the corresponding id in the database
     """
-    report = session.exec(
-        select(Report).where(Report.title == key)
-    ).first()
+    report = session.exec(select(Report).where(Report.title == key)).first()
     if report is None:
         raise ValueError(f"report with title '{key}' not found")
     if report.id is None:

@@ -23,8 +23,9 @@ export const Route = createFileRoute("/_layout/")({
 function Dashboard() {
   const [regions, setRegions] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
-  const [datapoints, setDatapoints] = useState<Datapoint[]>([]);
-
+  const [populationDatapoints, setPopulationDatapoints] = useState<Datapoint[]>([]);
+  const [fertilityDatapoints, setFertilityDatapoints] = useState<Datapoint[]>([]);
+  
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/v1/regions`)
       .then((res) => res.json())
@@ -40,20 +41,40 @@ function Dashboard() {
       // 2000 report — Low, Medium, High (ids 3, 4, 5)
       // TODO: these scenarios are hard-coded, make this dynamic
       fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion}&report_id=1&scenario_id=3`,
+        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion}&report_id=1&datatype_id=1&scenario_id=3`,
       ).then((res) => res.json()),
       fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion}&report_id=1&scenario_id=4`,
+        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion}&report_id=1&datatype_id=1&scenario_id=4`,
       ).then((res) => res.json()),
       fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion}&report_id=1&scenario_id=5`,
+        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion}&report_id=1&datatype_id=1&scenario_id=5`,
       ).then((res) => res.json()),
       // 2022 report — Estimates only (id 2)
       fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion}&report_id=2&scenario_id=2`,
+        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion}&report_id=2&datatype_id=1&scenario_id=2`,
       ).then((res) => res.json()),
     ]).then(([low, medium, high, estimates]) => {
-      setDatapoints([...low, ...medium, ...high, ...estimates]);
+      setPopulationDatapoints([...low, ...medium, ...high, ...estimates]);
+    });
+
+    Promise.all([
+      // 2000 report — Low, Medium, High (ids 3, 4, 5)
+      // TODO: these scenarios are hard-coded, make this dynamic
+      fetch(
+        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion}&report_id=1&datatype_id=2&scenario_id=3`,
+      ).then((res) => res.json()),
+      fetch(
+        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion}&report_id=1&datatype_id=2&scenario_id=4`,
+      ).then((res) => res.json()),
+      fetch(
+        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion}&report_id=1&datatype_id=2&scenario_id=5`,
+      ).then((res) => res.json()),
+      // 2022 report — Estimates only (id 2)
+      fetch(
+        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion}&report_id=2&datatype_id=2&scenario_id=2`,
+      ).then((res) => res.json()),
+    ]).then(([low, medium, high, estimates]) => {
+      setFertilityDatapoints([...low, ...medium, ...high, ...estimates]);
     });
   }, [selectedRegion]);
 
@@ -68,7 +89,8 @@ function Dashboard() {
           </option>
         ))}
       </select>
-      <LineChart data={datapoints} title="Population Projections" />
+      {/* <LineChart data={populationDatapoints} title="Population Projections" /> */}
+      <LineChart data={fertilityDatapoints} title="Fertility Projections" />
     </div>
   );
 }
