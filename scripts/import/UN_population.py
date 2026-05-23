@@ -29,9 +29,11 @@ from utils import (
 
 # assumes prediction_center/backend as root
 
+# TODO: this file path is no longer accurate
 # 2000 population
 # FILE = "../../WPP2000/WPP2000_EXCEL_FILES/DB02_Stock_Indicators/WPP2000_DB2_F1_TOTAL_POPULATION_BOTH_SEXES.xls"
 
+# TODO: this file path is no longer accurate
 # 2022 population
 FILE = "../../WPP2022/EXCEL_FILES/2_Population/WPP2022_POP_F03_1_POPULATION_SELECT_AGE_GROUPS_BOTH_SEXES.xlsx"
 
@@ -124,26 +126,66 @@ def get_dataframe_from_file(file: str, year: int) -> pd.DataFrame:
     return dfs_combined
 
 
-def populate_datapoints(df: pd.DataFrame, report_id: int):
+def populate_datapoints(df: pd.DataFrame, report_id: int) -> None:
     """
     takes as input a dataframe, populates the datapoint table with all data in the dataframe
     """
+    # TODO: refactor for lookups is slow now, swap back to dictionary-based
     with Session(engine) as session:
         # builds key directly from the context object
+
+        datatype_lookup = {
+            d.datatype_description: d.id for d in session.exec(select(Datatype)).all()
+        }
+        age_lookup = {a.age_group: a.id for a in session.exec(select(Age)).all()}
+        gender_lookup = {
+            g.gender_group: g.id for g in session.exec(select(Gender)).all()
+        }
+        region_lookup = {r.iso_num: r.id for r in session.exec(select(Region)).all()}
+        scenario_lookup = {
+            s.scenario_description: s.id for s in session.exec(select(Scenario)).all()
+        }
+        context_lookup = {
+            (c.datatype_id, c.age_id, c.gender_id, c.region_id): c.id
+            for c in session.exec(select(Context)).all()
+        }
+
         for _, row in df.iterrows():
-            datatype_id = get_datatype_id(session, row["datatype"])
-            age_id = get_age_id(session, row["age"])
-            gender_id = get_gender_id(session, row["gender"])
-            region_id = get_region_id(session, row["iso_num"])
-            context_id = get_context_id(
-                session, datatype_id, age_id, gender_id, region_id
+            print(_)
+
+            # datatype_id = get_datatype_id(session, row["datatype"])
+            # age_id = get_age_id(session, row["age_group"])
+            # gender_id = get_gender_id(session, row["gender"])
+            # region_id = get_region_id(session, row["iso_num"])
+
+            datatype_id = datatype_lookup.get(row["datatype"])
+            age_id = age_lookup.get(row["age_group"])
+            gender_id = gender_lookup.get(row["gender"])
+            region_id = region_lookup.get(row["iso_num"])
+            scenario_id = next(
+                (
+                    sid
+                    for desc, sid in scenario_lookup.items()
+                    if desc.lower() in row["scenario"].lower()
+                ),
+                None,
             )
+            if datatype_id is None or age_id is None or gender_id is None or region_id is None or scenario_id is None:
+                raise ValueError(f"datatype: {datatype_id}, age: {age_id}, gender: {gender_id}, region: {region_id}, scenario: {scenario_id}")
+
+            key = (datatype_id, age_id, gender_id, region_id)
+            context_id = context_lookup.get(key)
+
+            if context_id is None:
+                context_id = get_context_id(
+                    session, datatype_id, age_id, gender_id, region_id
+                )
 
             # context object is now in database, context_id holds the relevant id (also accessible with context.id)
             new_datapoint = Datapoint(
                 report_id=report_id,  # TODO: Can handle UN reports, can't do anything else
                 context_id=context_id,
-                scenario_id=get_scenario_id(session, row["scenario"]),
+                scenario_id=scenario_id,
                 year_analyzed=row["year_analyzed"],
                 value=row["value"],
             )

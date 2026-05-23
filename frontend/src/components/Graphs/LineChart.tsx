@@ -1,3 +1,4 @@
+import { SCENARIO_STYLES } from "@/constants/scenarios";
 import {
   Brush,
   CartesianGrid,
@@ -37,6 +38,8 @@ function pivotData(data: Datapoint[]): Record<string, number>[] {
 export default function LineChartObject({ data, title }: LineChartObjectProps) {
   const formattedData = pivotData(data);
 
+  const scenarioList = [...new Set(data.map((d) => d.scenario))];
+
   return (
     <div className="w-full">
       <h2 className="text-center text-xl font-semibold text-foreground mb-4">
@@ -44,21 +47,23 @@ export default function LineChartObject({ data, title }: LineChartObjectProps) {
       </h2>
       <ResponsiveContainer width="100%" height={400}>
         <LineChart data={formattedData}>
-          <XAxis dataKey="year_analyzed" />
+          <XAxis dataKey="year_analyzed" type="number" domain={["dataMin", "dataMax"]}/>
           <YAxis width={80} />
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
           <Legend />
           <Brush />
-          <Line
-            type="monotone"
-            dataKey="Estimate"
-            stroke="#000000"
-            dot={false}
-          />
-          <Line type="monotone" dataKey="Low" stroke="#00ff00" dot={false} />
-          <Line type="monotone" dataKey="Medium" stroke="#0000ff" dot={false} />
-          <Line type="monotone" dataKey="High" stroke="#ff0000" dot={false} />
+          {scenarioList.map((scenario) => (
+            <Line
+              key={scenario}
+              dataKey={scenario}
+              stroke={SCENARIO_STYLES[scenario]?.colour ?? "#0000bb"}
+              dot={false}
+              strokeWidth={SCENARIO_STYLES[scenario]?.strokewidth ?? 1}
+              name={SCENARIO_STYLES[scenario]?.label ?? scenario}
+              connectNulls={true}
+            />
+          ))}
         </LineChart>
       </ResponsiveContainer>
     </div>
