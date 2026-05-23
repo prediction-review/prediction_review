@@ -1,3 +1,4 @@
+import { SCENARIO_STYLES } from "@/constants/scenarios";
 import {
   Brush,
   CartesianGrid,
@@ -37,6 +38,18 @@ function pivotData(data: Datapoint[]): Record<string, number>[] {
 export default function LineChartObject({ data, title }: LineChartObjectProps) {
   const formattedData = pivotData(data);
 
+  function getScenarios(data: Datapoint[]): string[] {
+    const scenarioSet = new Set<string>();
+
+    for (const record of data) {
+      scenarioSet.add(record.scenario);
+    }
+
+    return Array.from(scenarioSet.values());
+  }
+
+  const scenarioList = getScenarios(data);
+
   return (
     <div className="w-full">
       <h2 className="text-center text-xl font-semibold text-foreground mb-4">
@@ -50,15 +63,14 @@ export default function LineChartObject({ data, title }: LineChartObjectProps) {
           <Tooltip />
           <Legend />
           <Brush />
-          <Line
-            type="monotone"
-            dataKey="Estimate"
-            stroke="#000000"
-            dot={false}
-          />
-          <Line type="monotone" dataKey="Low" stroke="#00ff00" dot={false} />
-          <Line type="monotone" dataKey="Medium" stroke="#0000ff" dot={false} />
-          <Line type="monotone" dataKey="High" stroke="#ff0000" dot={false} />
+          {scenarioList.map((scenario) => (
+            <Line
+              key={scenario}
+              dataKey={scenario}
+              stroke={SCENARIO_STYLES[scenario]?.colour ?? "#0000bb"}
+              dot={false}
+            />
+          ))}
         </LineChart>
       </ResponsiveContainer>
     </div>
