@@ -89,7 +89,7 @@ function Dashboard() {
           </option>
         ))}
       </select>
-      {/* <LineChart data={populationDatapoints} title="Population Projections" /> */}
+      <LineChart data={populationDatapoints} title="Population Projections" />
       <LineChart data={fertilityDatapoints} title="Fertility Projections" />
     </div>
   );
