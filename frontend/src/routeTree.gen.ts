@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { Route as LayoutDemographicsRouteImport } from './routes/_layout/demographics'
+import { Route as LayoutAboutRouteImport } from './routes/_layout/about'
 
 const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
@@ -21,24 +23,45 @@ const LayoutIndexRoute = LayoutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutDemographicsRoute = LayoutDemographicsRouteImport.update({
+  id: '/demographics',
+  path: '/demographics',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutAboutRoute = LayoutAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => LayoutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof LayoutIndexRoute
+  '/about': typeof LayoutAboutRoute
+  '/demographics': typeof LayoutDemographicsRoute
 }
 export interface FileRoutesByTo {
+  '/about': typeof LayoutAboutRoute
+  '/demographics': typeof LayoutDemographicsRoute
   '/': typeof LayoutIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_layout': typeof LayoutRouteWithChildren
+  '/_layout/about': typeof LayoutAboutRoute
+  '/_layout/demographics': typeof LayoutDemographicsRoute
   '/_layout/': typeof LayoutIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/about' | '/demographics'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/_layout' | '/_layout/'
+  to: '/about' | '/demographics' | '/'
+  id:
+    | '__root__'
+    | '/_layout'
+    | '/_layout/about'
+    | '/_layout/demographics'
+    | '/_layout/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -61,14 +84,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/demographics': {
+      id: '/_layout/demographics'
+      path: '/demographics'
+      fullPath: '/demographics'
+      preLoaderRoute: typeof LayoutDemographicsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/about': {
+      id: '/_layout/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof LayoutAboutRouteImport
+      parentRoute: typeof LayoutRoute
+    }
   }
 }
 
 interface LayoutRouteChildren {
+  LayoutAboutRoute: typeof LayoutAboutRoute
+  LayoutDemographicsRoute: typeof LayoutDemographicsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutAboutRoute: LayoutAboutRoute,
+  LayoutDemographicsRoute: LayoutDemographicsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
 }
 

@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router"
 import { Footer } from "@/components/Common/Footer"
+import { Header } from "@/components/Common/Header"
 
 export const Route = createFileRoute("/_layout")({
   component: Layout,
@@ -8,6 +9,7 @@ export const Route = createFileRoute("/_layout")({
 function Layout() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
+      <Header />
       <main className="flex-1">
         <Outlet />
       </main>

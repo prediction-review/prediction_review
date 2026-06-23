@@ -4,8 +4,9 @@ STARTUP INSTRUCTIONS
         docker compose up
 
     LOCAL
-        docker database: in prediction_center
-        docker compose up db 
+        OBSOLETE
+            docker database: in prediction_center
+            docker compose up db 
 
         backend: in /backend 
         .venv\Scripts\activate
@@ -13,6 +14,3 @@ STARTUP INSTRUCTIONS
 
         frontend: in /frontend
         npm run dev
-
-NOTES AND TODO:
-
