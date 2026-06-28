@@ -20,7 +20,7 @@ fileConfig(config.config_file_name)
 # target_metadata = None
 
 from sqlmodel import SQLModel  # noqa
-from app.demographics import model as __main__ #noqa
+from app.demographics import model as _ #noqa
 from app.shared import models as _
 from app.core.config import settings # noqa
 
