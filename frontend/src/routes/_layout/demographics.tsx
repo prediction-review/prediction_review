@@ -57,17 +57,17 @@ function RouteComponent() {
       // 2000 report — Low, Medium, High (ids 3, 4, 5)
       // TODO: these scenarios are hard-coded, make this dynamic
       fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion?.id}&report_id=1&datatype_id=1&scenario_id=3`,
+        `${import.meta.env.VITE_API_URL}/api/v1/demographics/datapoints/?region_id=${selectedRegion?.id}&report_id=1&datatype_id=1&scenario_id=3`,
       ).then((res) => res.json()),
       fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion?.id}&report_id=1&datatype_id=1&scenario_id=4`,
+        `${import.meta.env.VITE_API_URL}/api/v1/demographics/datapoints/?region_id=${selectedRegion?.id}&report_id=1&datatype_id=1&scenario_id=4`,
       ).then((res) => res.json()),
       fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion?.id}&report_id=1&datatype_id=1&scenario_id=5`,
+        `${import.meta.env.VITE_API_URL}/api/v1/demographics/datapoints/?region_id=${selectedRegion?.id}&report_id=1&datatype_id=1&scenario_id=5`,
       ).then((res) => res.json()),
       // 2022 report — Estimates only (id 2)
       fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion?.id}&report_id=2&datatype_id=1&scenario_id=2`,
+        `${import.meta.env.VITE_API_URL}/api/v1/demographics/datapoints/?region_id=${selectedRegion?.id}&report_id=2&datatype_id=1&scenario_id=2`,
       ).then((res) => res.json()),
     ]).then(([low, medium, high, estimates]) => {
       setPopulationDatapoints([...low, ...medium, ...high, ...estimates]);
@@ -78,17 +78,17 @@ function RouteComponent() {
       // 2000 report — Low, Medium, High (ids 3, 4, 5)
       // TODO: these scenarios are hard-coded, make this dynamic
       fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion?.id}&report_id=1&datatype_id=2&scenario_id=3`,
+        `${import.meta.env.VITE_API_URL}/api/v1/demographics/datapoints/?region_id=${selectedRegion?.id}&report_id=1&datatype_id=2&scenario_id=3`,
       ).then((res) => res.json()),
       fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion?.id}&report_id=1&datatype_id=2&scenario_id=4`,
+        `${import.meta.env.VITE_API_URL}/api/v1/demographics/datapoints/?region_id=${selectedRegion?.id}&report_id=1&datatype_id=2&scenario_id=4`,
       ).then((res) => res.json()),
       fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion?.id}&report_id=1&datatype_id=2&scenario_id=5`,
+        `${import.meta.env.VITE_API_URL}/api/v1/demographics/datapoints/?region_id=${selectedRegion?.id}&report_id=1&datatype_id=2&scenario_id=5`,
       ).then((res) => res.json()),
       // 2022 report — Estimates only (id 2)
       fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/datapoints/?region_id=${selectedRegion?.id}&report_id=2&datatype_id=2&scenario_id=2`,
+        `${import.meta.env.VITE_API_URL}/api/v1/demographics/datapoints/?region_id=${selectedRegion?.id}&report_id=2&datatype_id=2&scenario_id=2`,
       ).then((res) => res.json()),
     ]).then(([low, medium, high, estimates]) => {
       setFertilityDatapoints([...low, ...medium, ...high, ...estimates]);
