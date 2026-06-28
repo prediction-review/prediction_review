@@ -6,7 +6,7 @@ export const Route = createFileRoute("/_layout/about")({
 
 function RouteComponent() {
   return (
-    <div className="mx-16 my-8">
+    <div className="w-4/5 py-12 m-auto">
       <h1>
         <strong>About Prediction Review</strong>
       </h1>

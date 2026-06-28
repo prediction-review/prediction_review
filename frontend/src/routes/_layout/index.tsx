@@ -1,5 +1,5 @@
-import HomeCard from "@/components/Common/homeblock";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import HomeCard from "@/components/Common/Homeblock";
 
 export const Route = createFileRoute("/_layout/")({
   component: Dashboard,
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_layout/")({
 
 function Dashboard() {
   return (
-    <div className="p-8 w-full">
+    <div className="py-12 w-4/5 m-auto">
       <h1 className="text-foreground text-center">Prediction Review</h1>
       <div className=" flex justify-center items-center">
         <p>
@@ -22,11 +22,11 @@ function Dashboard() {
         </p>
       </div>
 
-      <Link to="/about">About</Link>
       <br />
       <HomeCard
         title="Demographics"
-        description="Learn how the United Nations projections compares across countries 20 years later"
+        description="Learn how the United Nations projections compare across countries 20 years later"
+        mainLink="/demographics"
         links={[
           { text: "population", url: "/demographics" },
           { text: "fertility", url: "/demographics" },

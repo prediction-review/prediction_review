@@ -14,3 +14,6 @@ STARTUP INSTRUCTIONS
 
         frontend: in /frontend
         npm run dev
+
+to do:
+- move "estimates" sheets from datapoint table to new table

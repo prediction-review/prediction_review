@@ -8,11 +8,13 @@ interface LinkItem {
 interface HomeCardProps {
   title: string;
   description: string;
+  mainLink: string
   links: LinkItem[];
 }
 
-export default function HomeCard({ title, description, links }: HomeCardProps) {
+export default function HomeCard({ title, description, mainLink, links }: HomeCardProps) {
   return (
+    <Link to={mainLink}>
     <div className="card flex flex-row justify-between p-1">
       <div className="flex flex-col">
         <h2 className="flex flex-1 justify-between p-1">{title}</h2>
@@ -26,5 +28,6 @@ export default function HomeCard({ title, description, links }: HomeCardProps) {
         ))}
       </div>
     </div>
+    </Link>
   );
 }

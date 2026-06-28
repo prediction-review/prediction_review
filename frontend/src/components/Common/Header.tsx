@@ -1,9 +1,10 @@
 import logo from "@/assets/Logo.png";
 import { Link } from "@tanstack/react-router";
+import Navbar from "./navbar";
 
 export function Header() {
   return (
-    <header className="border-b py-6 px-6 bg-secondary flex items-center">
+    <header className="border-b px-12 py-6 bg-secondary flex items-center">
       {/* LOGO */}
       <div className="flex-1 flex justify-start items-centerw-auto h-16">
         <Link to="/" className="flex h-full items-center">
@@ -25,7 +26,9 @@ export function Header() {
       </div>
 
       {/* navbar */}
-      <div className="flex-1 flex justify-end">NAVBAR</div>
+      <div className="flex-1 flex justify-end">
+        <Navbar />
+      </div>
     </header>
   );
 }
